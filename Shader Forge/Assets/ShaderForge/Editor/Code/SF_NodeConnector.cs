@@ -450,8 +450,12 @@ namespace ShaderForge {
 
 
 			bool hovering = Hovering(world:false);
-			bool click = ( Event.current.type == EventType.mouseDown && Event.current.button == button );
-			bool clickedCont = hovering && click;
+#if UNITY_2018
+            bool click = ( Event.current.type == EventType.MouseDown && Event.current.button == button );
+#else
+            bool click = ( Event.current.type == EventType.mouseDown && Event.current.button == button );
+#endif
+            bool clickedCont = hovering && click;
 			//bool clickedCont=cont&&click;
 			//Debug.Log();
 			return clickedCont;
@@ -459,8 +463,12 @@ namespace ShaderForge {
 
 		public bool Released() {
 			bool cont = Hovering(world:false);
-			bool release = ( Event.current.type == EventType.mouseUp );
-			return cont && release;
+#if UNITY_2018
+            bool release = ( Event.current.type == EventType.MouseUp );
+#else
+            bool release = ( Event.current.type == EventType.mouseUp );
+#endif
+            return cont && release;
 		}
 
 
@@ -492,10 +500,13 @@ namespace ShaderForge {
 				return;
 
 
-			
 
-			if( conType == ConType.cInput && Event.current.type == EventType.repaint ) {
-				DrawConnection( editor );
+#if UNITY_2018
+            if ( conType == ConType.cInput && Event.current.type == EventType.Repaint ) {
+#else
+            if ( conType == ConType.cInput && Event.current.type == EventType.repaint ) {
+#endif
+                DrawConnection( editor );
 			}
 
 			if( enableState == EnableState.Disabled || availableState == AvailableState.Unavailable )
@@ -543,8 +554,12 @@ namespace ShaderForge {
 					break;
 			}
 
-			if( Event.current.type == EventType.repaint ) {
-				Color c = hovering ? Color.green : GetConnectionLineColor();
+#if UNITY_2018
+            if ( Event.current.type == EventType.Repaint ) {
+#else
+            if ( Event.current.type == EventType.repaint ) {
+#endif
+                Color c = hovering ? Color.green : GetConnectionLineColor();
 
 				bool input = ( conType == ConType.cInput );
 				Vector2 start = input ? GetConnectionPoint() : MousePos();
@@ -701,8 +716,12 @@ namespace ShaderForge {
 		}*/
 
 		public bool CheckIfDeleted() {
-			if( (Event.current.keyCode == KeyCode.Delete || Event.current.keyCode == KeyCode.Backspace) && Event.current.type == EventType.keyDown && Hovering( world: true ) ) {
-				Disconnect();
+#if UNITY_2018
+            if ( (Event.current.keyCode == KeyCode.Delete || Event.current.keyCode == KeyCode.Backspace) && Event.current.type == EventType.KeyDown && Hovering( world: true ) ) {
+#else
+            if ( (Event.current.keyCode == KeyCode.Delete || Event.current.keyCode == KeyCode.Backspace) && Event.current.type == EventType.keyDown && Hovering( world: true ) ) {
+#endif
+                Disconnect();
 				return true;
 			}
 			return false;
@@ -1178,12 +1197,17 @@ namespace ShaderForge {
 				GUI.color = new Color(0.8f,0.8f,0.8f,0.3f);
 				GUI.Box(lockRect,string.Empty,GUI.skin.button);
 				GUI.color = Color.white;
-				//GUI.color = Color.white;
-				//GUI.Label(lockRect,"//");
-				//GUI.drawe
-				//GUI.Box(lockRect, "", );
-				if(Event.current.type == EventType.repaint){
-					SF_GUI.DrawLock(lockRect.PadTop(4),"Unavailable when using deferred rendering", TextAlignment.Right );
+                //GUI.color = Color.white;
+                //GUI.Label(lockRect,"//");
+                //GUI.drawe
+                //GUI.Box(lockRect, "", );
+#if UNITY_2018
+                if (Event.current.type == EventType.Repaint){
+#else
+                if (Event.current.type == EventType.repaint){
+#endif
+
+                    SF_GUI.DrawLock(lockRect.PadTop(4),"Unavailable when using deferred rendering", TextAlignment.Right );
 
 				}
 				

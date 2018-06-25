@@ -1314,13 +1314,17 @@ namespace ShaderForge {
 
 
 
-			
 
-			//Vector2 prev = new Vector2( rect.x, rect.y );
-			//int prevCont = GUIUtility.hotControl;
 
-			if(Event.current.type == EventType.repaint){
-				commentYposCurrent = Mathf.Lerp(commentYposCurrent, commentYposTarget, 0.4f);
+            //Vector2 prev = new Vector2( rect.x, rect.y );
+            //int prevCont = GUIUtility.hotControl;
+
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint){
+#else
+            if (Event.current.type == EventType.repaint){
+#endif
+                commentYposCurrent = Mathf.Lerp(commentYposCurrent, commentYposTarget, 0.4f);
 			}
 
 
@@ -1397,8 +1401,12 @@ namespace ShaderForge {
 
 
 			string focusName = "namelabel" + this.id;
-			if( Event.current.type == EventType.keyDown && ( Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter ) && GUI.GetNameOfFocusedControl() == focusName ) {
-				editor.Defocus();
+#if UNITY_2018
+            if ( Event.current.type == EventType.KeyDown && ( Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter ) && GUI.GetNameOfFocusedControl() == focusName ) {
+#else
+            if ( Event.current.type == EventType.keyDown && ( Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter ) && GUI.GetNameOfFocusedControl() == focusName ) {
+#endif
+                editor.Defocus();
 			}
 
 			bool codeNode = this is SFN_Code;
@@ -1509,8 +1517,12 @@ namespace ShaderForge {
 				if(isEditingNodeTextField){
 
 
-					bool clicked = Event.current.rawType == EventType.mouseDown && Event.current.button == 0;
-					bool clickedOutside = clicked && !cr.Contains(Event.current.mousePosition);
+#if UNITY_2018
+                    bool clicked = Event.current.rawType == EventType.MouseDown && Event.current.button == 0;
+#else
+                    bool clicked = Event.current.rawType == EventType.mouseDown && Event.current.button == 0;
+#endif
+                    bool clickedOutside = clicked && !cr.Contains(Event.current.mousePosition);
 					bool pressedReturn = Event.current.rawType == EventType.KeyDown && Event.current.keyCode == KeyCode.Return;
 
 					bool defocus = pressedReturn || clickedOutside;

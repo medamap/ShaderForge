@@ -183,15 +183,23 @@ namespace ShaderForge {
 			bool mouseInNodeView = SF_Editor.instance.nodeView.MouseInsideNodeView(false);
 
 
-			if(Event.current.type == EventType.repaint){
-				smoothHotkeySelectorIndex = Mathf.Lerp(smoothHotkeySelectorIndex, hotkeySelectorIndex, 0.5f);
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint){
+#else
+            if (Event.current.type == EventType.repaint){
+#endif
+                smoothHotkeySelectorIndex = Mathf.Lerp(smoothHotkeySelectorIndex, hotkeySelectorIndex, 0.5f);
 			}
 
 			bool useScroll = SF_Settings.quickPickScrollWheel;
 
-			if(holding && Event.current.type == EventType.scrollWheel && HotkeyFriends.Count > 0 && mouseInNodeView){
+#if UNITY_2018
+            if (holding && Event.current.type == EventType.ScrollWheel && HotkeyFriends.Count > 0 && mouseInNodeView){
+#else
+            if (holding && Event.current.type == EventType.scrollWheel && HotkeyFriends.Count > 0 && mouseInNodeView){
+#endif
 
-				if(useScroll){
+                if (useScroll){
 					hotkeySelectorIndex += (int)Mathf.Sign(Event.current.delta.y);
 					hotkeySelectorIndex = Mathf.Clamp(hotkeySelectorIndex, 0, HotkeyFriends.Count-1);
 				}
@@ -205,17 +213,25 @@ namespace ShaderForge {
 				return null;
 
 			if( Event.current.keyCode == key ) {
-				if( Event.current.type == EventType.keyDown && !SF_GUI.HoldingControl() && holding == false && mouseInNodeView ){
+#if UNITY_2018
+                if ( Event.current.type == EventType.KeyDown && !SF_GUI.HoldingControl() && holding == false && mouseInNodeView ){
+#else
+                if ( Event.current.type == EventType.keyDown && !SF_GUI.HoldingControl() && holding == false && mouseInNodeView ){
+#endif
 
-					hotkeySelectorIndex = defaultHotkeySelectorIndex;
+                    hotkeySelectorIndex = defaultHotkeySelectorIndex;
 					smoothHotkeySelectorIndex = defaultHotkeySelectorIndex;
 
 					quickpickerStartPosition = Event.current.mousePosition;
 
 					holding = true;
 				}
-				if( Event.current.rawType == EventType.keyUp ){
-					holding = false;
+#if UNITY_2018
+                if ( Event.current.rawType == EventType.KeyUp ){
+#else
+                if ( Event.current.rawType == EventType.keyUp ){
+#endif
+                    holding = false;
 				}
 			}
 
@@ -329,9 +345,13 @@ namespace ShaderForge {
 
 
 
-				//}
-				if(Event.current.type == EventType.keyDown/* && Event.current.type == EventType.layout*/ /*&& GUI.GetNameOfFocusedControl() == "defocus"*/){
-					Event.current.Use();
+                //}
+#if UNITY_2018
+                if (Event.current.type == EventType.KeyDown/* && Event.current.type == EventType.layout*/ /*&& GUI.GetNameOfFocusedControl() == "defocus"*/){
+#else
+                if (Event.current.type == EventType.keyDown/* && Event.current.type == EventType.layout*/ /*&& GUI.GetNameOfFocusedControl() == "defocus"*/){
+#endif
+                    Event.current.Use();
 				}
 				//}
 				
@@ -343,8 +363,12 @@ namespace ShaderForge {
 
 
 
-			bool clicked = Event.current.type == EventType.mouseDown;
-			if(holding && clicked){
+#if UNITY_2018
+            bool clicked = Event.current.type == EventType.MouseDown;
+#else
+            bool clicked = Event.current.type == EventType.mouseDown;
+#endif
+            if (holding && clicked){
 				return HotkeyFriends[hotkeySelectorIndex];
 			} else {
 				return null;

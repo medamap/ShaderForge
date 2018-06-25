@@ -630,10 +630,14 @@ namespace ShaderForge {
 
 
 		bool Clicked() {
-			return Event.current.type == EventType.mouseDown;
-		}
-		
-		float fps = 0;
+#if UNITY_2018
+            return Event.current.type == EventType.MouseDown;
+#else
+            return Event.current.type == EventType.mouseDown;
+#endif
+        }
+
+        float fps = 0;
 		double prevFrameTime = 1;
 		public double deltaTime = 0.02;
 
@@ -916,8 +920,12 @@ namespace ShaderForge {
 				}
 			}
 
-			if( Event.current.rawType == EventType.keyUp ){
-				foreach(SF_EditorNodeData nd in nodeTemplates){
+#if UNITY_2018
+            if ( Event.current.rawType == EventType.KeyUp ){
+#else
+            if ( Event.current.rawType == EventType.keyUp ){
+#endif
+                foreach (SF_EditorNodeData nd in nodeTemplates){
 					nd.holding = false;
 				}
 			}
@@ -975,13 +983,17 @@ namespace ShaderForge {
 			}
 			GUI.color = Color.white;
 
-			//Rect ssRectIcon = new Rect(0f, 0f, SF_GUI.Screenshot_icon.width, SF_GUI.Screenshot_icon.height);
-			////ssRectIcon.center = ssRect.center;
-			//GUI.DrawTexture(ssRectIcon, SF_GUI.Screenshot_icon);
+            //Rect ssRectIcon = new Rect(0f, 0f, SF_GUI.Screenshot_icon.width, SF_GUI.Screenshot_icon.height);
+            ////ssRectIcon.center = ssRect.center;
+            //GUI.DrawTexture(ssRectIcon, SF_GUI.Screenshot_icon);
 
 
-			if(Event.current.type == EventType.repaint)
-				UpdateCoroutines();
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint)
+#else
+            if (Event.current.type == EventType.repaint)
+#endif
+                UpdateCoroutines();
 
 
 			DrawTooltip();

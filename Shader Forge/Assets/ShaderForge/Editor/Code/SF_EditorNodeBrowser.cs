@@ -108,8 +108,12 @@ namespace ShaderForge {
 
 		public void OnLocalGUI( Rect rect ) {
 
-			if( IsPlacing() && Event.current.type == EventType.mouseUp && Event.current.button == 1 ) {
-				CancelDrag();
+#if UNITY_2018
+            if ( IsPlacing() && Event.current.type == EventType.MouseUp && Event.current.button == 1 ) {
+#else
+            if ( IsPlacing() && Event.current.type == EventType.mouseUp && Event.current.button == 1 ) {
+#endif
+                CancelDrag();
 				Event.current.Use();
 			}
 
@@ -185,8 +189,12 @@ namespace ShaderForge {
 
 			scrollPos = GUI.BeginScrollView( panelRect, scrollPos, scrollRect, false, true /*GUILayout.Width( rect.wi )*/ );
 			{
-				if(Event.current.type == EventType.layout)
-					innerStartY = btnRect.y;
+#if UNITY_2018
+                if (Event.current.type == EventType.Layout)
+#else
+                if (Event.current.type == EventType.layout)
+#endif
+                    innerStartY = btnRect.y;
 				if( GetNodeList().Count > 0 ) {
 					foreach( SF_EditorNodeData entry in GetNodeList() ) {
 
@@ -203,8 +211,12 @@ namespace ShaderForge {
 					GUI.color = Color.white;
 				}
 
-				if(Event.current.type == EventType.layout){
-					innerHeight = btnRect.yMax - innerStartY;
+#if UNITY_2018
+                if (Event.current.type == EventType.Layout){
+#else
+                if (Event.current.type == EventType.layout){
+#endif
+                    innerHeight = btnRect.yMax - innerStartY;
 					//Debug.Log ("Inner: " + innerHeight + ", Panel: " + panelRect.height);
 				}
 
@@ -247,8 +259,12 @@ namespace ShaderForge {
 			GUI.Label( btnRect, (usable ? string.Empty : "    ") + entry.nodeName, styleButton );
 
 
-			if( mouseOver && Event.current.type == EventType.mouseDown && Event.current.button == 0 && usable) {
-				OnStartDrag( entry );
+#if UNITY_2018
+            if ( mouseOver && Event.current.type == EventType.MouseDown && Event.current.button == 0 && usable) {
+#else
+            if ( mouseOver && Event.current.type == EventType.mouseDown && Event.current.button == 0 && usable) {
+#endif
+                OnStartDrag( entry );
 			} else if( Event.current.type == EventType.ContextClick ) {
 				Vector2 mousePos = Event.current.mousePosition;
 				if( btnRect.Contains( mousePos ) ) {
@@ -275,8 +291,12 @@ namespace ShaderForge {
 			if(usable){
 				SF_GUI.AssignCursor( btnRect, MouseCursor.Pan );
 			} else {
-				if(Event.current.type == EventType.repaint){
-					GUI.enabled = true;
+#if UNITY_2018
+                if (Event.current.type == EventType.Repaint){
+#else
+                if (Event.current.type == EventType.repaint){
+#endif
+                    GUI.enabled = true;
 					SF_GUI.DrawLock(btnRect.PadTop(4),"Forward rendering only", TextAlignment.Right);
 					//Draw(btnRect.PadTop(4), false, true, true, false); // Draw lock
 					GUI.enabled = false;
@@ -327,9 +347,13 @@ namespace ShaderForge {
 			boxRect.center = Event.current.mousePosition;
 
 			GUI.Box( boxRect, dragNode.nodeName );
-			//	Debug.Log( Event.current.type.ToString()); 
-			if( Event.current.rawType == EventType.mouseUp )
-				OnStopDrag();
+            //	Debug.Log( Event.current.type.ToString()); 
+#if UNITY_2018
+            if ( Event.current.rawType == EventType.MouseUp )
+#else
+            if ( Event.current.rawType == EventType.mouseUp )
+#endif
+                OnStopDrag();
 
 
 		}
@@ -350,8 +374,12 @@ namespace ShaderForge {
 
 
 		public bool DragButton( Rect r, string label, GUIStyle style ) {
-			bool clicked = ( Event.current.type == EventType.mouseDown && Event.current.button == 0 );
-			GUI.Button( r, label, style );
+#if UNITY_2018
+            bool clicked = ( Event.current.type == EventType.MouseDown && Event.current.button == 0 );
+#else
+            bool clicked = ( Event.current.type == EventType.mouseDown && Event.current.button == 0 );
+#endif
+            GUI.Button( r, label, style );
 			bool hover = r.Contains( Event.current.mousePosition );
 			return ( hover && clicked );
 		}

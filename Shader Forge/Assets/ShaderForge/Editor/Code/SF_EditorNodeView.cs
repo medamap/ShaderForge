@@ -288,8 +288,12 @@ namespace ShaderForge {
 
 
 
+#if UNITY_2018
+			if(Event.current.type == EventType.Repaint){
+#else
 			if(Event.current.type == EventType.repaint){
-				nodeSpaceMousePos = ScreenSpaceToZoomSpace( Event.current.mousePosition );
+#endif
+                nodeSpaceMousePos = ScreenSpaceToZoomSpace( Event.current.mousePosition );
 
 			}
 
@@ -308,8 +312,12 @@ namespace ShaderForge {
 				if(editor.nodeView != null)
 					editor.nodeView.selection.DrawBoxSelection();
 
-				if(Event.current.type == EventType.repaint){
-					viewSpaceMousePos = ZoomSpaceToScreenSpace( Event.current.mousePosition );
+#if UNITY_2018
+                if (Event.current.type == EventType.Repaint){
+#else
+                if (Event.current.type == EventType.repaint){
+#endif
+                    viewSpaceMousePos = ZoomSpaceToScreenSpace( Event.current.mousePosition );
 				}
 				// NODES
 				if( editor.nodes != null ) {
@@ -335,8 +343,12 @@ namespace ShaderForge {
 						}
 					}
 
-					if( Event.current.type == EventType.repaint ) {
-						for( int i=0; i < editor.nodes.Count; i++ )
+#if UNITY_2018
+                    if ( Event.current.type == EventType.Repaint ) {
+#else
+                    if ( Event.current.type == EventType.repaint ) {
+#endif
+                        for ( int i=0; i < editor.nodes.Count; i++ )
 							editor.nodes[i].DrawConnectors();
 					}
 					
@@ -411,29 +423,45 @@ namespace ShaderForge {
 
 			if( Event.current.type == EventType.DragPerform ) {
 				Object droppedObj = DragAndDrop.objectReferences[0];
-				if( droppedObj is Texture2D || droppedObj is ProceduralTexture || droppedObj is RenderTexture ) {
-					SFN_Tex2d texNode = editor.nodeBrowser.OnStopDrag() as SFN_Tex2d;
+#if UNITY_2018
+                if ( droppedObj is Texture2D || droppedObj is RenderTexture ) {
+#else
+                if ( droppedObj is Texture2D || droppedObj is ProceduralTexture || droppedObj is RenderTexture ) {
+#endif
+                    SFN_Tex2d texNode = editor.nodeBrowser.OnStopDrag() as SFN_Tex2d;
 					texNode.TextureAsset = droppedObj as Texture;
 					texNode.OnAssignedTexture();
 					Event.current.Use();
 				}
-				if(droppedObj is ProceduralMaterial){
+#if !UNITY_2018
+                if (droppedObj is ProceduralMaterial){
 					OnDroppedSubstance(droppedObj as ProceduralMaterial);
 				}
-			}
+#endif
+            }
 
-			if( Event.current.type == EventType.dragUpdated && Event.current.type != EventType.DragPerform ) {
-				if( DragAndDrop.objectReferences.Length > 0 ) {
+#if UNITY_2018
+            if ( Event.current.type == EventType.DragUpdated && Event.current.type != EventType.DragPerform ) {
+#else
+            if ( Event.current.type == EventType.dragUpdated && Event.current.type != EventType.DragPerform ) {
+#endif
+                if ( DragAndDrop.objectReferences.Length > 0 ) {
 					Object dragObj = DragAndDrop.objectReferences[0];
-					if( dragObj is Texture2D || dragObj is ProceduralTexture || dragObj is RenderTexture  ) {
-						DragAndDrop.visualMode = DragAndDropVisualMode.Link;
+#if UNITY_2018
+                    if ( dragObj is Texture2D || dragObj is RenderTexture  ) {
+#else
+                    if ( dragObj is Texture2D || dragObj is ProceduralTexture || dragObj is RenderTexture  ) {
+#endif
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Link;
 						if( !editor.nodeBrowser.IsPlacing() )
 							editor.nodeBrowser.OnStartDrag( editor.GetTemplate<SFN_Tex2d>() );
 						else
 							editor.nodeBrowser.UpdateDrag();
-					} else if(dragObj is ProceduralMaterial){
+#if !UNITY_2018
+                    } else if(dragObj is ProceduralMaterial){
 						DragAndDrop.visualMode = DragAndDropVisualMode.Link;
-					} else {
+#endif
+                    } else {
 						DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
 					}
 				} else {
@@ -443,12 +471,16 @@ namespace ShaderForge {
 
 
 
-			
 
 
-			// If release
-			if( MouseInsideNodeView( false ) && Event.current.type == EventType.mouseUp) {
-				bool ifCursorStayed = Vector2.SqrMagnitude( mousePosStart - Event.current.mousePosition ) < SF_Tools.stationaryCursorRadius;
+
+            // If release
+#if UNITY_2018
+            if ( MouseInsideNodeView( false ) && Event.current.type == EventType.MouseUp) {
+#else
+            if ( MouseInsideNodeView( false ) && Event.current.type == EventType.mouseUp) {
+#endif
+                bool ifCursorStayed = Vector2.SqrMagnitude( mousePosStart - Event.current.mousePosition ) < SF_Tools.stationaryCursorRadius;
 
 				if( ifCursorStayed && !SF_GUI.MultiSelectModifierHeld() )
 					selection.DeselectAll(registerUndo:true);
@@ -461,10 +493,14 @@ namespace ShaderForge {
 				SF_NodeConnector.pendingConnectionSource = null;
 			}
 
-			// If press
-			if( Event.current.type == EventType.mouseDown && MouseInsideNodeView( false ) ) {
-				//bool ifNotHoldingModifier = !SF_GUI.MultiSelectModifierHeld();
-				mousePosStart = Event.current.mousePosition;
+            // If press
+#if UNITY_2018
+            if ( Event.current.type == EventType.MouseDown && MouseInsideNodeView( false ) ) {
+#else
+            if ( Event.current.type == EventType.mouseDown && MouseInsideNodeView( false ) ) {
+#endif
+                //bool ifNotHoldingModifier = !SF_GUI.MultiSelectModifierHeld();
+                mousePosStart = Event.current.mousePosition;
 				editor.Defocus();
 			}
 
@@ -492,7 +528,8 @@ namespace ShaderForge {
 		}
 
 
-		public void OnDroppedSubstance(ProceduralMaterial procMat){
+#if !UNITY_2018
+        public void OnDroppedSubstance(ProceduralMaterial procMat){
 
 			Texture diffuse = TryGetProceduralTexture(procMat, "_MainTex");
 			Texture normal = TryGetProceduralTexture(procMat, "_BumpMap");
@@ -505,9 +542,10 @@ namespace ShaderForge {
 
 
 		}
+#endif
 
-		// For connecting procedural materials to the main node
-		public SF_Node TryLinkIfExistsAndOpenSlotAvailable(Texture tex, string propertyName, SF_NodeConnector connector, string outChannel, SF_Node prevNode = null){
+        // For connecting procedural materials to the main node
+        public SF_Node TryLinkIfExistsAndOpenSlotAvailable(Texture tex, string propertyName, SF_NodeConnector connector, string outChannel, SF_Node prevNode = null){
 
 			if(tex){
 				SFN_Tex2d tNode = editor.AddNode<SFN_Tex2d>();
@@ -528,7 +566,8 @@ namespace ShaderForge {
 			return null;
 		}
 
-		public Texture TryGetProceduralTexture(ProceduralMaterial procMat, string propName){
+#if !UNITY_2018
+        public Texture TryGetProceduralTexture(ProceduralMaterial procMat, string propName){
 			Texture returnTex = null;
 			try{
 				if(procMat.HasProperty(propName))
@@ -538,14 +577,19 @@ namespace ShaderForge {
 			}
 			return returnTex;
 		}
+#endif
 
 
 
 
-		public void UpdateCutLine(){
+        public void UpdateCutLine(){
 
-			if(SF_GUI.HoldingAlt() && Event.current.type == EventType.mouseDown && Event.current.button == 1){ // Alt + RMB drag
-				StartCutting();
+#if UNITY_2018
+            if (SF_GUI.HoldingAlt() && Event.current.type == EventType.MouseDown && Event.current.button == 1){ // Alt + RMB drag
+#else
+            if (SF_GUI.HoldingAlt() && Event.current.type == EventType.mouseDown && Event.current.button == 1){ // Alt + RMB drag
+#endif
+                StartCutting();
 			} else if(SF_GUI.ReleasedRawRMB()){
 				StopCutting();
 			}
@@ -645,8 +689,12 @@ namespace ShaderForge {
 
 		public void UpdateDebugInput() {
 
-			if( Event.current.type != EventType.keyDown )
-				return;
+#if UNITY_2018
+            if ( Event.current.type != EventType.KeyDown )
+#else
+            if ( Event.current.type != EventType.keyDown )
+#endif
+                return;
 
 			if( Event.current.keyCode == KeyCode.UpArrow ) {
 				HierarchalRefresh();

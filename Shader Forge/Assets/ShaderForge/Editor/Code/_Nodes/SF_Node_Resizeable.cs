@@ -115,18 +115,22 @@ namespace ShaderForge {
 			SF_GUI.DrawTextureTiled(LocalRect().GetBorder(RectBorder.BottomRight	,size, 	showResizeCursor:true), SF_GUI.Handle_drag, local:true );
 
 
-			// -1 = left / top
-			//  0 = static
-			//  1 = right / bottom
+            // -1 = left / top
+            //  0 = static
+            //  1 = right / bottom
 
 
 
-			bool clicked = Event.current.type == EventType.mouseDown && Event.current.button == 0;
+#if UNITY_2018
+            bool clicked = Event.current.type == EventType.MouseDown && Event.current.button == 0;
+#else
+            bool clicked = Event.current.type == EventType.mouseDown && Event.current.button == 0;
+#endif
 
 
 
 
-			if(clicked){
+            if (clicked){
 
 				xDrag = 0;
 				yDrag = 0;
@@ -176,9 +180,13 @@ namespace ShaderForge {
 
 
 
-			if(resizing && Event.current.type == EventType.mouseDrag){
+#if UNITY_2018
+            if (resizing && Event.current.type == EventType.MouseDrag){
+#else
+            if (resizing && Event.current.type == EventType.mouseDrag){
+#endif
 
-				if(Event.current.delta.sqrMagnitude > 0){
+                if (Event.current.delta.sqrMagnitude > 0){
 					UndoRecord("resize node");
 				}
 

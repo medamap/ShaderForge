@@ -127,13 +127,17 @@ namespace ShaderForge {
 
 
 
-			//Debug.Log("GUI THREAD: " + Event.current.type + " - " + GUI.GetNameOfFocusedControl());
+            //Debug.Log("GUI THREAD: " + Event.current.type + " - " + GUI.GetNameOfFocusedControl());
 
-			//if(Event.current.type == EventType.layout)
-				//return;
+            //if(Event.current.type == EventType.layout)
+            //return;
 
-			if(Event.current.type == EventType.repaint)
-				guiIncID++;
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint)
+#else
+            if (Event.current.type == EventType.repaint)
+#endif
+                guiIncID++;
 
 			//if(Event.current.type == EventType.repaint)
 				//if(hoveringNode){
@@ -151,8 +155,12 @@ namespace ShaderForge {
 			int buttonTextMargin = 4;
 
 			int sideButtonWidth = Mathf.RoundToInt(currentSideButtonWidth);
-			if(Event.current.type == EventType.repaint){
-				currentSideButtonWidth = Mathf.Lerp(currentSideButtonWidth, targetSideButtonWidth, 0.6f);
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint){
+#else
+            if (Event.current.type == EventType.repaint){
+#endif
+                currentSideButtonWidth = Mathf.Lerp(currentSideButtonWidth, targetSideButtonWidth, 0.6f);
 			}
 
 			Rect txtRect = r;
@@ -184,9 +192,13 @@ namespace ShaderForge {
 
 
 
-			if(isEditing && !justFocused && Event.current.type == EventType.repaint){
-				//Debug.Log("GUI THREAD " + Event.current.type + " LOWER");
-				if(GUI.GetNameOfFocusedControl() != controlName){
+#if UNITY_2018
+            if (isEditing && !justFocused && Event.current.type == EventType.Repaint){
+#else
+            if (isEditing && !justFocused && Event.current.type == EventType.repaint){
+#endif
+                //Debug.Log("GUI THREAD " + Event.current.type + " LOWER");
+                if (GUI.GetNameOfFocusedControl() != controlName){
 					//Debug.Log("DEFOCUS - " + Event.current.type + " fc: " + GUI.GetNameOfFocusedControl() );
 					isEditing = false;
 					isEditingAnyNodeTextField = false;
@@ -194,9 +206,13 @@ namespace ShaderForge {
 			}
 
 
-			
-			if(Event.current.type == EventType.repaint){
-				justFocused = false;
+
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint){
+#else
+            if (Event.current.type == EventType.repaint){
+#endif
+                justFocused = false;
 			}
 
 			//Debug.Log("GUI THREAD B: " + Event.current.type + " - " + GUI.GetNameOfFocusedControl());
@@ -221,17 +237,21 @@ namespace ShaderForge {
 
 				txtEditor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
 				savedCaretPosition = txtEditor.cursorIndex;
-				//txtEditor.selectPos = 4;
+                //txtEditor.selectPos = 4;
 
 
 
 
-				//if(SF_GUI.HoldingControl() && Event.current.type == EventType.keyDown && Event.current.keyCode == KeyCode.C)
+                //if(SF_GUI.HoldingControl() && Event.current.type == EventType.keyDown && Event.current.keyCode == KeyCode.C)
 
 
-				if(Event.current.keyCode == KeyCode.Tab && Event.current.type == EventType.keyDown){
-					//Debug.Log("Tab");
-					UndoRecord("insert tab in " + functionName + " code");
+#if UNITY_2018
+                if (Event.current.keyCode == KeyCode.Tab && Event.current.type == EventType.KeyDown){
+#else
+                if (Event.current.keyCode == KeyCode.Tab && Event.current.type == EventType.keyDown){
+#endif
+                    //Debug.Log("Tab");
+                    UndoRecord("insert tab in " + functionName + " code");
 					code = code.Insert( txtEditor.cursorIndex, "\t" );
 					//Debug.Log("Caret position = " + txtEditor.pos);
 					savedCaretPosition = txtEditor.cursorIndex;
@@ -277,21 +297,29 @@ namespace ShaderForge {
 				GUI.Box(txtRect.PadBottom(1),code,SF_Styles.CodeTextArea);
 				if(hoveringNode){
 
-					bool doubleClicked = Event.current.isMouse && Event.current.type == EventType.mouseDown && Event.current.clickCount == 2;
+#if UNITY_2018
+                    bool doubleClicked = Event.current.isMouse && Event.current.type == EventType.MouseDown && Event.current.clickCount == 2;
+#else
+                    bool doubleClicked = Event.current.isMouse && Event.current.type == EventType.mouseDown && Event.current.clickCount == 2;
+#endif
 
-					Rect btnRect = new Rect(txtRect.xMax,txtRect.yMax,46,16).MovedUp().MovedLeft();
+                    Rect btnRect = new Rect(txtRect.xMax,txtRect.yMax,46,16).MovedUp().MovedLeft();
 					btnRect.x -= 3;
 					btnRect.y -= 4;
 
 					btnRect.xMin -= 3;
 					btnRect.yMin -= 4;
 
-					// Workaround for a weird issue
-					//bool clickedBtn = btnRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.mouseUp && Event.current.button == 0;
+                    // Workaround for a weird issue
+                    //bool clickedBtn = btnRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.mouseUp && Event.current.button == 0;
 
-					//Debug.Log("GUI THREAD B_B_1: " + Event.current.type + " - " + GUI.GetNameOfFocusedControl());
-					if(GUI.Button(btnRect,"Edit",EditorStyles.miniButton) || doubleClicked && Event.current.type == EventType.repaint){
-						isEditing = true;
+                    //Debug.Log("GUI THREAD B_B_1: " + Event.current.type + " - " + GUI.GetNameOfFocusedControl());
+#if UNITY_2018
+                    if (GUI.Button(btnRect,"Edit",EditorStyles.miniButton) || doubleClicked && Event.current.type == EventType.Repaint){
+#else
+                    if (GUI.Button(btnRect,"Edit",EditorStyles.miniButton) || doubleClicked && Event.current.type == EventType.repaint){
+#endif
+                        isEditing = true;
 						//Debug.Log("FOCUS - " + Event.current.type + " fc: " + GUI.GetNameOfFocusedControl() );
 						pressedEditLastFrameCounter = 5;
 						isEditingAnyNodeTextField = true;

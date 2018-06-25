@@ -66,8 +66,12 @@ namespace ShaderForge {
 			r.width = 26;
 			r.y -= 26;
 
-			if(Event.current.type == EventType.repaint){
-				smoothConnectorHeight = Mathf.Lerp(smoothConnectorHeight, targetConnectorHeight, 0.6f);
+#if UNITY_2018
+            if (Event.current.type == EventType.Repaint){
+#else
+            if (Event.current.type == EventType.repaint){
+#endif
+                smoothConnectorHeight = Mathf.Lerp(smoothConnectorHeight, targetConnectorHeight, 0.6f);
 			}
 
 			r = r.PadTop(1).PadBottom(1).PadLeft(2);

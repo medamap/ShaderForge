@@ -168,8 +168,12 @@ namespace UnityEditor {
 
 			if( hasShaderForgeData ) {
 				if( GUILayout.Button( "Open in Shader Forge" ) ) {
-					if(Event.current.rawType != EventType.mouseDown)
-						SF_Editor.Init( shader );
+#if UNITY_2018
+                    if(Event.current.rawType != EventType.MouseDown)
+#else
+                    if(Event.current.rawType != EventType.mouseDown)
+#endif
+                        SF_Editor.Init( shader );
 				}
 			} else {
 				GUILayout.BeginHorizontal();
